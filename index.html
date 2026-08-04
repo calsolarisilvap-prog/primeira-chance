@@ -3,13 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Pagamento Aprovado</title>
 
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;
+n.push=n;
+n.loaded=!0;
+n.version='2.0';
+n.queue=[];
+t=b.createElement(e);
+t.async=!0;
+t.src='https://connect.facebook.net/en_US/fbevents.js';
+s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s);
+}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+
+fbq('init', '3986194581515664');
+fbq('track', 'PageView');
+</script>
+
+<noscript>
+<img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=3986194581515664&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel Code -->
+
 <style>
+
 body{
 margin:0;
-font-family:Arial,Helvetica,sans-serif;
 background:#0f172a;
+font-family:Arial,Helvetica,sans-serif;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -20,32 +50,39 @@ color:white;
 .card{
 background:#1e293b;
 padding:40px;
-border-radius:18px;
-max-width:500px;
+border-radius:20px;
 text-align:center;
-box-shadow:0 0 30px rgba(0,0,0,.3);
+max-width:520px;
+box-shadow:0 15px 40px rgba(0,0,0,.35);
 }
 
 h1{
+font-size:36px;
 color:#22c55e;
-font-size:32px;
+margin-bottom:20px;
 }
 
 p{
-font-size:18px;
+font-size:20px;
 line-height:1.6;
 }
 
 a{
 display:inline-block;
-margin-top:25px;
+margin-top:30px;
 background:#25D366;
-color:white;
-padding:15px 30px;
-text-decoration:none;
+padding:15px 35px;
 border-radius:12px;
+text-decoration:none;
+color:white;
 font-weight:bold;
+font-size:18px;
 }
+
+a:hover{
+opacity:.9;
+}
+
 </style>
 
 </head>
@@ -56,13 +93,9 @@ font-weight:bold;
 
 <h1>✅ Pagamento Aprovado!</h1>
 
-<p>
-Obrigado pela confiança.
-</p>
+<p>Obrigado pela confiança.</p>
 
-<p>
-Seu Kit Primeira Chance será enviado pelo WhatsApp em instantes.
-</p>
+<p>Seu Kit Primeira Chance será enviado pelo WhatsApp em instantes.</p>
 
 <a href="https://wa.me/55SEUNUMERO">
 Falar no WhatsApp
