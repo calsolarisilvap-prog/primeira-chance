@@ -85,3 +85,54 @@ if(track){
     });
 
 }
+// ==========================================
+// PORTFOLIO MODAL
+// ==========================================
+
+const modal = document.getElementById("portfolioModal");
+
+const modalImage = document.getElementById("modalImage");
+
+const closeModal = document.querySelector(".close-modal");
+
+const portfolioImages = document.querySelectorAll(".portfolio-card img");
+
+portfolioImages.forEach((img)=>{
+
+    img.addEventListener("click",()=>{
+
+        modal.classList.add("active");
+
+        modalImage.src = img.src;
+
+        modalImage.alt = img.alt;
+
+    });
+
+});
+
+closeModal.addEventListener("click",()=>{
+
+    modal.classList.remove("active");
+
+});
+
+modal.addEventListener("click",(e)=>{
+
+    if(e.target===modal){
+
+        modal.classList.remove("active");
+
+    }
+
+});
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key==="Escape"){
+
+        modal.classList.remove("active");
+
+    }
+
+});
