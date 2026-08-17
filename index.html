@@ -494,42 +494,58 @@
 
           <div class="portfolio-image-wrapper">
 
-          <div class="portfolio-gallery">
+          <div class="portfolio-carousel">
 
-  <img
-    src="assets/portfolio/producao.png"
-    alt="Modelo de currículo para Produção"
-    class="portfolio-image"
-    loading="lazy"
-  >
+  <button class="portfolio-arrow prev" type="button" aria-label="Currículo anterior">
+    &#10094;
+  </button>
 
-  <img
-    src="assets/portfolio/motorista.png"
-    alt="Modelo de currículo para Motorista"
-    class="portfolio-image"
-    loading="lazy"
-  >
+  <div class="portfolio-track">
 
-  <img
-    src="assets/portfolio/administrativo.png"
-    alt="Modelo de currículo Administrativo"
-    class="portfolio-image"
-    loading="lazy"
-  >
+    <div class="portfolio-slide active">
+      <img src="assets/portfolio/producao.png"
+           alt="Currículo para Produção"
+           class="portfolio-image">
+      <span>Produção</span>
+    </div>
 
-  <img
-    src="assets/portfolio/ti.png"
-    alt="Modelo de currículo para Tecnologia da Informação"
-    class="portfolio-image"
-    loading="lazy"
-  >
+    <div class="portfolio-slide">
+      <img src="assets/portfolio/motorista.png"
+           alt="Currículo para Motorista"
+           class="portfolio-image">
+      <span>Motorista</span>
+    </div>
 
-  <img
-    src="assets/portfolio/vendas.png"
-    alt="Modelo de currículo para Atendimento e Vendas"
-    class="portfolio-image"
-    loading="lazy"
-  >
+    <div class="portfolio-slide">
+      <img src="assets/portfolio/administrativo.png"
+           alt="Currículo Administrativo"
+           class="portfolio-image">
+      <span>Administrativo</span>
+    </div>
+
+    <div class="portfolio-slide">
+      <img src="assets/portfolio/ti.png"
+           alt="Currículo para Tecnologia da Informação"
+           class="portfolio-image">
+      <span>Tecnologia / TI</span>
+    </div>
+
+    <div class="portfolio-slide">
+      <img src="assets/portfolio/vendas.png"
+           alt="Currículo para Atendimento e Vendas"
+           class="portfolio-image">
+      <span>Atendimento e Vendas</span>
+    </div>
+
+  </div>
+
+  <button class="portfolio-arrow next" type="button" aria-label="Próximo currículo">
+    &#10095;
+  </button>
+
+  <div class="portfolio-dots"></div>
+
+</div>
 
 </div>
           </div>
