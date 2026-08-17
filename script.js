@@ -218,3 +218,102 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+/* ========================================
+   CARROSSEL DO PORTFÓLIO
+======================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const carousel = document.querySelector(".portfolio-carousel");
+
+  if (!carousel) return;
+
+  const slides = carousel.querySelectorAll(".portfolio-slide");
+  const prevButton = carousel.querySelector(".portfolio-arrow.prev");
+  const nextButton = carousel.querySelector(".portfolio-arrow.next");
+  const dotsContainer = carousel.querySelector(".portfolio-dots");
+
+  let currentSlide = 0;
+
+  // Criar bolinhas automaticamente
+  slides.forEach((slide, index) => {
+
+    const dot = document.createElement("button");
+
+    dot.classList.add("portfolio-dot");
+    dot.setAttribute("type", "button");
+    dot.setAttribute("aria-label", `Ver currículo ${index + 1}`);
+
+    if (index === 0) {
+      dot.classList.add("active");
+    }
+
+    dot.addEventListener("click", function () {
+      showSlide(index);
+    });
+
+    dotsContainer.appendChild(dot);
+
+  });
+
+  const dots = carousel.querySelectorAll(".portfolio-dot");
+
+  function showSlide(index) {
+
+    if (index >= slides.length) {
+      index = 0;
+    }
+
+    if (index < 0) {
+      index = slides.length - 1;
+    }
+
+    slides.forEach(slide => {
+      slide.classList.remove("active");
+    });
+
+    dots.forEach(dot => {
+      dot.classList.remove("active");
+    });
+
+    slides[index].classList.add("active");
+    dots[index].classList.add("active");
+
+    currentSlide = index;
+  }
+
+  nextButton.addEventListener("click", function () {
+    showSlide(currentSlide + 1);
+  });
+
+  prevButton.addEventListener("click", function () {
+    showSlide(currentSlide - 1);
+  });
+
+  // Suporte a gesto de arrastar no celular
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  carousel.addEventListener("touchstart", function (event) {
+    touchStartX = event.changedTouches[0].screenX;
+  }, { passive: true });
+
+  carousel.addEventListener("touchend", function (event) {
+
+    touchEndX = event.changedTouches[0].screenX;
+
+    const difference = touchStartX - touchEndX;
+
+    if (Math.abs(difference) < 50) return;
+
+    if (difference > 0) {
+      showSlide(currentSlide + 1);
+    } else {
+      showSlide(currentSlide - 1);
+    }
+
+  }, { passive: true });
+
+  showSlide(0);
+
+});
