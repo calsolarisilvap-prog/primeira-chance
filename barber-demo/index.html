@@ -3,454 +3,616 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0a0b0d">
-<title>Barber OS — Demonstração</title>
+<meta name="theme-color" content="#090a0c">
+<title>Barber OS • Protótipo V1</title>
 <style>
 :root{
-  --bg:#0a0b0d;--panel:#111419;--panel2:#171b21;--line:#272d35;
-  --text:#f5f2eb;--muted:#9ba3ad;--gold:#d4aa60;--green:#59d08b;
-  --red:#ef7b7b;--blue:#7ab4ff
+  --bg:#090a0c;--bg2:#0e1014;--card:#12151a;--card2:#181c22;--line:#292f37;
+  --text:#f6f2e9;--muted:#a4acb7;--gold:#d6ad62;--gold2:#f0cf8a;
+  --green:#62d596;--red:#ef8181;--blue:#85b8ff;--amber:#efbe62;
+  --shadow:0 18px 50px rgba(0,0,0,.28)
 }
 *{box-sizing:border-box}
 html{background:var(--bg)}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif}
-button,input,select{font:inherit}
+body{margin:0;background:
+radial-gradient(circle at 80% -10%,rgba(214,173,98,.10),transparent 30%),
+linear-gradient(180deg,#090a0c,#0c0e12 38%,#090a0c);
+color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-.app{max-width:430px;margin:0 auto;padding:18px 16px 100px;min-height:100vh}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
-.brand{font-weight:900;letter-spacing:.06em}
-.sub{font-size:12px;color:var(--muted);margin-top:3px}
-.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 9px;font-size:11px;color:var(--muted);white-space:nowrap}
-.dot{width:8px;height:8px;border-radius:999px;background:var(--green)}
-.card{background:linear-gradient(145deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:12px}
-.soft{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px}
-h1,h2,h3,p{margin-top:0}
-h1{font-size:30px;line-height:1.05;letter-spacing:-.03em;margin-bottom:10px}
-h2{font-size:23px;letter-spacing:-.02em;margin-bottom:8px}
-h3{font-size:17px;margin-bottom:8px}
-p{color:var(--muted);line-height:1.45}
-.label{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.09em;text-transform:uppercase}
-.btn{width:100%;min-height:50px;border-radius:15px;padding:12px 14px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-weight:850}
-.btn.primary{background:var(--gold);border-color:var(--gold);color:#15120c}
-.btn.secondary{background:transparent}
-.btn:active{transform:scale(.99)}
-.row{display:flex;gap:10px}
-.row>*{flex:1;min-width:0}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.kpi{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px;min-width:0}
-.kpi b{display:block;font-size:21px;letter-spacing:-.03em}
-.kpi span{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.screen{display:none}
+.app{max-width:440px;margin:0 auto;min-height:100vh;padding:14px 14px 112px}
+.topbar{position:sticky;top:0;z-index:30;margin:-14px -14px 14px;padding:12px 14px;background:rgba(9,10,12,.88);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.04)}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{font-size:14px;font-weight:950;letter-spacing:.12em}
+.demo{font-size:10px;font-weight:900;letter-spacing:.08em;color:var(--gold2);border:1px solid rgba(214,173,98,.28);padding:6px 9px;border-radius:999px}
+.modebar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.mode{border:1px solid var(--line);background:#11141a;color:var(--muted);border-radius:12px;min-height:38px;font-size:12px;font-weight:850}
+.mode.active{background:var(--gold);border-color:var(--gold);color:#17120b}
+.screen{display:none;animation:fade .18s ease}
 .screen.active{display:block}
-.barber{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:13px;color:var(--text);margin-bottom:9px}
-.avatar{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#20262e;font-weight:900;flex:0 0 auto}
-.barber small{color:var(--muted)}
-.spacer{flex:1}
-.progress{height:9px;border-radius:999px;background:#242a31;overflow:hidden;margin:16px 0}
-.progress>div{height:100%;background:var(--gold);width:20%;transition:width .3s}
-.timeline{border-left:2px solid var(--line);margin-left:7px;padding-left:18px}
-.slot{position:relative;padding:0 0 18px 8px}
-.slot:before{content:"";position:absolute;width:12px;height:12px;border-radius:50%;left:-25px;top:5px;background:var(--panel);border:2px solid var(--line)}
+@keyframes fade{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card{background:linear-gradient(145deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.soft{background:#111419;border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:10px}
+.hero{position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-90px;top:-100px;background:rgba(214,173,98,.08)}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:30px;line-height:1.02;letter-spacing:-.045em;margin-bottom:10px}
+h2{font-size:23px;line-height:1.08;letter-spacing:-.03em;margin-bottom:9px}
+h3{font-size:17px;margin-bottom:7px}
+p{color:var(--muted);line-height:1.45}
+.small{font-size:12px;color:var(--muted)}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:var(--muted);font-weight:900}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid var(--line);border-radius:999px;font-size:11px;font-weight:800;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.btn{width:100%;min-height:50px;border-radius:15px;border:1px solid var(--line);padding:12px 14px;background:var(--card2);color:var(--text);font-weight:900}
+.btn.primary{background:linear-gradient(180deg,var(--gold2),var(--gold));border-color:var(--gold);color:#17120b}
+.btn.ghost{background:transparent}
+.btn.green{background:rgba(98,213,150,.12);border-color:rgba(98,213,150,.32);color:#bdf4d4}
+.btn:active{transform:scale(.99)}
+.row{display:flex;gap:9px}
+.row>*{flex:1;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi{padding:13px;border-radius:17px;background:#101318;border:1px solid var(--line)}
+.kpi b{display:block;font-size:21px;letter-spacing:-.035em}
+.kpi span{display:block;font-size:10px;color:var(--muted);margin-top:3px;line-height:1.25}
+.listbtn{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:14px;border-radius:18px;border:1px solid var(--line);background:#111419;color:var(--text);margin-bottom:9px}
+.ico{width:43px;height:43px;border-radius:14px;background:#20252d;display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+.grow{flex:1}
+.price{font-weight:900}
+.status-green{color:var(--green)}
+.status-amber{color:var(--amber)}
+.status-red{color:var(--red)}
+.div{height:1px;background:var(--line);margin:14px 0}
+input,select,textarea{width:100%;border:1px solid var(--line);background:#0d1014;color:var(--text);border-radius:14px;padding:12px 13px;outline:none}
+input,select{min-height:48px}
+textarea{min-height:84px;resize:vertical}
+label{display:block;font-size:12px;font-weight:850;margin:0 0 6px}
+.field{margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid var(--line);background:#111419;color:var(--muted);border-radius:999px;padding:9px 12px;font-size:12px;font-weight:850}
+.chip.active{background:rgba(214,173,98,.14);border-color:rgba(214,173,98,.42);color:var(--gold2)}
+.bigtime{font-size:58px;line-height:1;font-weight:950;letter-spacing:-.06em;margin:7px 0}
+.progress{height:9px;border-radius:999px;background:#242a31;overflow:hidden;margin:14px 0}
+.progress>div{height:100%;background:var(--gold);transition:.25s}
+.timeline{border-left:2px solid var(--line);margin-left:8px;padding-left:17px}
+.slot{position:relative;padding:1px 0 17px 7px}
+.slot:before{content:"";position:absolute;left:-25px;top:5px;width:11px;height:11px;border-radius:50%;background:#161a20;border:2px solid var(--line)}
 .slot.live:before{background:var(--green);border-color:var(--green)}
-.slot b{display:block}
+.slot.warn:before{background:var(--amber);border-color:var(--amber)}
 .slot small{color:var(--muted)}
-.hero-number{font-size:54px;font-weight:950;letter-spacing:-.055em;margin:4px 0 0}
-.highlight{color:var(--gold)}
-.success{color:var(--green)}
-.notice{display:none;border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:12px 14px;margin-bottom:12px}
+.toolbar{display:flex;gap:7px;overflow:auto;padding-bottom:2px;margin-bottom:12px}
+.toolbar button{white-space:nowrap;border:1px solid var(--line);background:#111419;color:var(--muted);border-radius:999px;padding:8px 11px;font-size:11px;font-weight:850}
+.toolbar button.active{color:#17120b;background:var(--gold);border-color:var(--gold)}
+.notice{display:none;margin-bottom:12px;padding:12px 14px;border:1px solid rgba(98,213,150,.32);background:rgba(98,213,150,.10);border-radius:16px;color:#c9f7dc;font-size:13px;line-height:1.4}
 .notice.show{display:block}
-.chat{display:flex;flex-direction:column;gap:9px}
-.bubble{max-width:87%;padding:11px 13px;border-radius:16px;line-height:1.38;font-size:14px}
-.me{align-self:flex-end;background:#252b33}
-.bot{align-self:flex-start;background:var(--panel);border:1px solid var(--line)}
-input,select{width:100%;min-height:49px;border-radius:14px;border:1px solid var(--line);background:#0f1216;color:var(--text);padding:0 13px}
-label{display:block;font-size:13px;font-weight:750;margin-bottom:7px}
+.metric{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.metric:last-child{border-bottom:0}
+.metric strong{font-size:14px}
+.metric span{color:var(--muted);font-size:12px}
+.avatar{width:46px;height:46px;border-radius:15px;background:#222831;display:grid;place-items:center;font-weight:950}
+.stars{color:var(--gold2);letter-spacing:.06em}
+.switchline{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)}
+.switch{width:46px;height:27px;border-radius:999px;background:#2b313a;position:relative;flex:0 0 auto}
+.switch.on{background:rgba(98,213,150,.45)}
+.switch:after{content:"";position:absolute;width:21px;height:21px;top:3px;left:3px;border-radius:50%;background:white;transition:.2s}
+.switch.on:after{left:22px}
+.voice{position:fixed;right:max(18px,calc((100vw - 440px)/2 + 18px));bottom:90px;width:58px;height:58px;border-radius:50%;border:1px solid rgba(214,173,98,.44);background:linear-gradient(180deg,var(--gold2),var(--gold));color:#17120b;font-size:24px;box-shadow:0 10px 30px rgba(214,173,98,.24);display:none;z-index:35}
+.voice.show{display:block}
+.bottomnav{position:fixed;z-index:29;left:50%;bottom:0;transform:translateX(-50%);width:min(440px,100%);display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:7px 10px calc(7px + env(safe-area-inset-bottom));background:rgba(9,10,12,.94);backdrop-filter:blur(18px);border-top:1px solid var(--line)}
+.nav{border:0;background:transparent;color:var(--muted);min-height:50px;border-radius:12px;font-size:10px;font-weight:850}
+.nav b{display:block;font-size:18px;margin-bottom:1px}
+.nav.active{background:#161a20;color:var(--text)}
+.modal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.72);display:none;align-items:flex-end;justify-content:center}
+.modal.show{display:flex}
+.sheet{width:min(440px,100%);background:#111419;border:1px solid var(--line);border-radius:26px 26px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:82vh;overflow:auto}
+.mic{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;margin:12px auto 16px;background:rgba(214,173,98,.14);border:1px solid rgba(214,173,98,.40);font-size:32px}
+.chat{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto;margin-bottom:10px}
+.bubble{max-width:88%;border-radius:16px;padding:11px 13px;font-size:13px;line-height:1.4}
+.bubble.me{align-self:flex-end;background:#252a32}
+.bubble.ai{align-self:flex-start;background:#101318;border:1px solid var(--line)}
 .hidden{display:none!important}
-.bottomnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(430px,100%);padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:rgba(10,11,13,.96);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);gap:5px;z-index:20}
-.nav{min-height:48px;border:0;border-radius:12px;background:transparent;color:var(--muted);font-size:11px;font-weight:800}
-.nav.active{background:var(--panel2);color:var(--text)}
-.nav span{display:block;font-size:17px;margin-bottom:2px}
-.hero-wrap{position:relative;overflow:hidden}
-.hero-wrap:after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;background:rgba(212,170,96,.08);right:-70px;top:-80px}
-.divider{height:1px;background:var(--line);margin:14px 0}
-.statline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0}
-.statline strong{font-size:14px}
-.statline span{font-size:12px;color:var(--muted)}
-.pulse{animation:pulse 1.2s ease 1}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(89,208,139,.35)}100%{box-shadow:0 0 0 16px rgba(89,208,139,0)}}
 @media(max-width:350px){.grid3{grid-template-columns:1fr}.row{flex-direction:column}}
 </style>
 </head>
 <body>
 <div class="app">
   <div class="topbar">
-    <div>
-      <div class="brand">BARBER OS</div>
-      <div class="sub">Barber House • Florianópolis</div>
+    <div class="topline">
+      <div>
+        <div class="brand">BARBER OS</div>
+        <div class="small">Protótipo navegável • V1</div>
+      </div>
+      <span class="demo">DEMO</span>
     </div>
-    <span class="tag">DEMONSTRAÇÃO</span>
+    <div class="modebar">
+      <button class="mode active" data-mode="client">Cliente</button>
+      <button class="mode" data-mode="barber">Barbeiro</button>
+      <button class="mode" data-mode="owner">Dono</button>
+    </div>
   </div>
 
-  <div id="notice" class="notice" aria-live="polite"></div>
+  <div id="notice" class="notice"></div>
 
-  <section id="home" class="screen active">
-    <div class="card hero-wrap">
-      <span class="tag"><span class="dot"></span> Movimento tranquilo</span>
-      <h1 style="margin-top:18px">Como você quer cortar hoje?</h1>
-      <p>Agenda e fila trabalham juntas para encontrar o melhor atendimento.</p>
-      <button id="cutToday" class="btn primary">Quero cortar hoje</button>
-      <div class="row" style="margin-top:9px">
-        <button id="schedule" class="btn secondary">Agendar horário</button>
-        <button id="myQueue" class="btn secondary">Minha fila</button>
+  <!-- 1 -->
+  <section id="c-home" class="screen active" data-group="client">
+    <div class="card hero">
+      <span class="tag"><span class="dot"></span> Aberto agora • até 20h</span>
+      <h1 style="margin-top:17px">Barber House</h1>
+      <p>Fila, agendamento e atendimento no mesmo lugar.</p>
+      <div class="grid2">
+        <div class="kpi"><b>3</b><span>pessoas na fila</span></div>
+        <div class="kpi"><b>~28 min</b><span>espera média</span></div>
       </div>
+      <button class="btn primary" data-go="c-register" style="margin-top:12px">💈 Quero cortar hoje</button>
+      <button class="btn ghost" data-go="c-register" style="margin-top:8px">📅 Agendar horário</button>
     </div>
-
     <div class="card">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
-        <h3 style="margin:0">Atendimento agora</h3>
-        <span class="sub">Atualizado agora</span>
-      </div>
-      <div class="grid2" style="margin-top:12px">
-        <div class="kpi"><b>Lucas</b><span class="success">Disponível agora</span></div>
-        <div class="kpi"><b>18 min</b><span>espera com Rafael</span></div>
-      </div>
+      <div class="eyebrow">Profissionais agora</div>
+      <div class="metric"><strong>Bruno</strong><span class="status-green">Livre agora</span></div>
+      <div class="metric"><strong>Rafael</strong><span>~12 min</span></div>
+      <div class="metric"><strong>Lucas</strong><span>~35 min</span></div>
     </div>
-
-    <button id="guided" class="btn secondary">▶ Modo apresentação de 5 minutos</button>
-    <p class="sub" style="margin-top:12px">Clientes, agenda interna, fila e financeiro desta demonstração são simulados. Serviços e valores seguem padrões reais do mercado local.</p>
+    <button class="btn ghost" data-go="c-track">Já estou na fila →</button>
   </section>
 
-  <section id="choose" class="screen">
-    <button class="btn secondary goHome" style="margin-bottom:10px">← Voltar</button>
+  <!-- 2 -->
+  <section id="c-register" class="screen" data-group="client">
+    <button class="btn ghost" data-go="c-home" style="margin-bottom:10px">← Voltar</button>
     <div class="card">
-      <div class="label">Atendimento hoje</div>
-      <h2 style="margin-top:6px">Quem você prefere?</h2>
-      <label for="service">Serviço</label>
-      <select id="service">
-        <option value="Corte|40">Corte • 30 min • R$40</option>
-        <option value="Barba|35">Barba • 25 min • R$35</option>
-        <option value="Corte + barba|65">Corte + barba • 60 min • R$65</option>
-        <option value="Sobrancelha|5">Sobrancelha • 10 min • R$5</option>
-      </select>
+      <div class="eyebrow">Tela 2 • Cadastro</div>
+      <h2 style="margin-top:6px">Rapidinho. Só o necessário.</h2>
+      <div class="field"><label>Nome completo</label><input id="clientName" value="João Martins"></div>
+      <div class="field"><label>WhatsApp</label><input value="(48) 99999-9999"></div>
+      <label>De quanto em quanto tempo costuma cortar?</label>
+      <div class="chips" style="margin-bottom:13px">
+        <button class="chip">7 dias</button><button class="chip active">15 dias</button><button class="chip">20 dias</button><button class="chip">30 dias</button>
+      </div>
+      <div class="field"><label>Barbeiro preferido • opcional</label><select><option>Nenhum</option><option selected>Lucas</option><option>Rafael</option><option>Bruno</option></select></div>
+      <div class="field"><label>Foto de referência • opcional</label><button class="btn ghost" id="fakeUpload">🖼️ Adicionar referência</button></div>
+      <div class="switchline"><div><strong>Receber avisos</strong><div class="small">Disponibilidade e retorno</div></div><div class="switch on"></div></div>
+      <button class="btn primary" data-go="c-service" style="margin-top:14px">Continuar</button>
     </div>
-
-    <button class="barber chooseBarber" data-name="Lucas">
-      <span class="avatar">L</span>
-      <span><b>Lucas</b><br><small>Disponível agora</small></span>
-      <span class="spacer"></span><span class="tag">Melhor opção</span>
-    </button>
-    <button class="barber chooseBarber" data-name="Rafael">
-      <span class="avatar">R</span>
-      <span><b>Rafael</b><br><small>~18 min • 2 na frente</small></span>
-      <span class="spacer"></span><span>›</span>
-    </button>
-    <button class="barber chooseBarber" data-name="André">
-      <span class="avatar">A</span>
-      <span><b>André</b><br><small>Próximo horário 15:40</small></span>
-      <span class="spacer"></span><span>›</span>
-    </button>
-    <button class="chooseBarber btn primary" data-name="Qualquer profissional">Quero o atendimento mais rápido</button>
   </section>
 
-  <section id="queue" class="screen">
-    <button class="btn secondary goHome" style="margin-bottom:10px">← Início</button>
-    <div class="card" style="text-align:center">
-      <div id="qState" class="label">NA FILA</div>
-      <div id="qMin" class="hero-number">28</div>
-      <div class="sub">minutos estimados</div>
-      <div class="progress"><div id="qBar"></div></div>
-      <h2 id="qPos">Você é o 3º da fila</h2>
-      <p id="qMsg">Pode continuar onde está. Avisaremos quando estiver perto da sua vez.</p>
-      <button id="advanceQueue" class="btn primary">Simular avanço da fila</button>
+  <!-- 3 -->
+  <section id="c-service" class="screen" data-group="client">
+    <button class="btn ghost" data-go="c-register" style="margin-bottom:10px">← Voltar</button>
+    <div class="card">
+      <div class="eyebrow">Tela 3 • Serviço</div>
+      <h2 style="margin-top:6px">O que você quer fazer?</h2>
+      <button class="listbtn service active" data-service="Corte" data-price="50" data-min="30"><span class="ico">✂️</span><span class="grow"><b>Corte</b><br><span class="small">30 min</span></span><span class="price">R$50</span></button>
+      <button class="listbtn service" data-service="Barba" data-price="35" data-min="30"><span class="ico">🪒</span><span class="grow"><b>Barba</b><br><span class="small">30 min</span></span><span class="price">R$35</span></button>
+      <button class="listbtn service" data-service="Corte + Barba" data-price="80" data-min="60"><span class="ico">💈</span><span class="grow"><b>Corte + Barba</b><br><span class="small">60 min</span></span><span class="price">R$80</span></button>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Profissional</div>
+      <h3 style="margin-top:7px">Quem atende você?</h3>
+      <button class="listbtn barberpick active" data-barber="Primeiro disponível"><span class="ico">⚡</span><span class="grow"><b>Primeiro disponível</b><br><span class="small">Bruno • agora</span></span></button>
+      <button class="listbtn barberpick" data-barber="Lucas"><span class="avatar">L</span><span class="grow"><b>Lucas</b> ⭐<br><span class="small">Seu preferido • ~35 min</span></span></button>
+      <button class="listbtn barberpick" data-barber="Rafael"><span class="avatar">R</span><span class="grow"><b>Rafael</b><br><span class="small">~12 min</span></span></button>
+      <button class="btn primary" data-go="c-options">Ver melhor opção</button>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section id="c-options" class="screen" data-group="client">
+    <button class="btn ghost" data-go="c-service" style="margin-bottom:10px">← Voltar</button>
+    <div class="card hero">
+      <div class="eyebrow">Tela 4 • Fila ou agendamento</div>
+      <h2 style="margin-top:7px">Encontramos 3 caminhos</h2>
+      <p id="choiceSummary">Corte • Primeiro disponível</p>
+      <button class="listbtn" data-go="c-track"><span class="ico">⚡</span><span class="grow"><b>Entrar na fila agora</b><br><span class="small">Espera estimada: ~12 min</span></span><span>›</span></button>
+      <button class="listbtn" data-go="c-track"><span class="ico">🟢</span><span class="grow"><b>Encaixe às 14:40</b><br><span class="small">30 min + 10 min de margem</span></span><span>›</span></button>
+      <button class="listbtn" data-go="c-track"><span class="ico">📅</span><span class="grow"><b>Agendar outro horário</b><br><span class="small">16:20 • 17:00 • 17:40</span></span><span>›</span></button>
     </div>
     <div class="soft">
-      <div class="label">Seu atendimento</div>
-      <h3 id="qBarber" style="margin:8px 0 4px">Lucas</h3>
-      <p id="qService" style="margin-bottom:0">Corte • R$40</p>
+      <div class="small">A vaga selecionada fica reservada por alguns minutos durante a confirmação para evitar agendamento duplo.</div>
     </div>
   </section>
 
-  <section id="barber" class="screen">
-    <div class="card hero-wrap">
-      <span class="tag">LUCAS • MEU DIA</span>
-      <h1 style="margin-top:16px">Sua agenda está <span class="highlight">72%</span> ocupada.</h1>
+  <!-- 5 -->
+  <section id="c-track" class="screen" data-group="client">
+    <button class="btn ghost" data-go="c-home" style="margin-bottom:10px">← Início</button>
+    <div class="card" style="text-align:center">
+      <div id="trackState" class="eyebrow">NA FILA</div>
+      <div id="trackMin" class="bigtime">18</div>
+      <div class="small">minutos estimados</div>
+      <div class="progress"><div id="trackBar" style="width:38%"></div></div>
+      <h2 id="trackTitle">Você está em 2º</h2>
+      <p id="trackText">Pode continuar onde está. Avisamos quando estiver perto.</p>
+      <button id="trackAdvance" class="btn primary">Simular avanço</button>
+      <button id="goingBtn" class="btn green hidden" style="margin-top:8px">🚶 Estou indo</button>
+    </div>
+    <div class="soft">
+      <div class="eyebrow">Seu atendimento</div>
+      <h3 style="margin:7px 0 3px">Lucas • Corte</h3>
+      <div class="small">R$50 • margem de segurança aplicada automaticamente</div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section id="b-home" class="screen" data-group="barber">
+    <div class="card hero">
+      <span class="tag"><span class="dot"></span> LUCAS • MEU DIA</span>
+      <h1 style="margin-top:17px">Seu próximo cliente já chegou.</h1>
       <div class="grid3">
-        <div class="kpi"><b>7</b><span>atendimentos</span></div>
-        <div class="kpi"><b>R$365</b><span>faturado</span></div>
-        <div class="kpi"><b>R$146</b><span>comissão</span></div>
+        <div class="kpi"><b>5</b><span>atendimentos</span></div>
+        <div class="kpi"><b>R$280</b><span>gerados hoje</span></div>
+        <div class="kpi"><b>R$112</b><span>comissão</span></div>
       </div>
     </div>
-
     <div class="card">
-      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-        <h3 style="margin:0">Agenda inteligente</h3>
-        <span class="tag">Agenda + fila</span>
-      </div>
-      <div class="timeline" style="margin-top:16px">
-        <div class="slot live"><small>14:00</small><b>João • Corte</b><small>Agendado</small></div>
-        <div id="slotFree" class="slot"><small>14:40–15:20</small><b>40 min livres</b><small>Cabe 1 corte antes do próximo agendamento</small></div>
-        <div class="slot"><small>15:20</small><b>Pedro • Corte + barba</b><small>Agendado</small></div>
-      </div>
-      <button id="smartFit" class="btn primary">Encontrar encaixe automaticamente</button>
+      <div class="eyebrow">Agora</div>
+      <h2 style="margin-top:6px">João Martins</h2>
+      <p>Corte • 14:40 • <span class="status-green">Chegou ✅</span></p>
+      <button class="btn primary" data-go="b-active">Iniciar atendimento</button>
     </div>
-
     <div class="card">
-      <span class="tag">CADEIRA LIVRE</span>
-      <h2 style="margin-top:14px">Não deixe esse horário morrer.</h2>
-      <p>O sistema procura clientes com maior chance de vir agora.</p>
-      <button id="freeNow" class="btn primary">Ativar Estou Livre</button>
-
-      <div id="freeStats" class="hidden" style="margin-top:12px">
-        <div class="grid3">
-          <div class="kpi"><b>18</b><span>para retornar</span></div>
-          <div class="kpi"><b>7</b><span>nesse horário</span></div>
-          <div class="kpi"><b>4</b><span>preferem Lucas</span></div>
-        </div>
-        <button id="callBest" class="btn secondary" style="margin-top:10px">Chamar os 4 mais compatíveis</button>
+      <div class="eyebrow">Depois</div>
+      <div class="timeline" style="margin-top:13px">
+        <div class="slot live"><small>14:40</small><b>João • Corte</b><small>Chegou</small></div>
+        <div class="slot"><small>15:20</small><b>Pedro • Corte + Barba</b><small>Agendado</small></div>
+        <div class="slot warn"><small>16:20</small><b>45 min livres</b><small>5 clientes compatíveis</small></div>
       </div>
+      <button class="btn green" id="freeBtn">🟢 Estou Livre</button>
+    </div>
+  </section>
 
-      <div id="accepted" class="soft hidden" style="margin-top:10px">
-        <div class="label">Cliente encontrado</div>
-        <h3 style="margin:6px 0">João aceitou ✅</h3>
-        <p style="margin:0">Corte • R$40 • chegada prevista em 12 min</p>
+  <!-- 7 -->
+  <section id="b-active" class="screen" data-group="barber">
+    <button class="btn ghost" data-go="b-home" style="margin-bottom:10px">← Meu dia</button>
+    <div class="card hero">
+      <div class="eyebrow">Tela 7 • Em atendimento</div>
+      <h1 style="margin-top:7px">João Martins</h1>
+      <div class="grid2">
+        <div class="kpi"><b id="timer">23 min</b><span>tempo atual</span></div>
+        <div class="kpi"><b>40 min</b><span>tempo previsto</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Ficha rápida</div>
+      <div class="metric"><strong>Último corte</strong><span>Degradê baixo</span></div>
+      <div class="metric"><strong>Preferência</strong><span>Topo na tesoura</span></div>
+      <div class="metric"><strong>Referência</strong><span class="status-green">Foto disponível</span></div>
+      <button class="btn ghost" data-go="b-client" style="margin-top:10px">Ver ficha completa</button>
+    </div>
+    <div class="soft">
+      <strong>Próximo: Pedro • 15:20</strong>
+      <div class="small" style="margin-top:4px">Margem atual estimada: 17 min</div>
+    </div>
+    <button class="btn primary" data-go="b-checkout">Finalizar atendimento</button>
+  </section>
+
+  <!-- 8 -->
+  <section id="b-checkout" class="screen" data-group="barber">
+    <button class="btn ghost" data-go="b-active" style="margin-bottom:10px">← Atendimento</button>
+    <div class="card">
+      <div class="eyebrow">Tela 8 • Fechamento</div>
+      <h2 style="margin-top:7px">Finalizar João</h2>
+      <div class="metric"><strong>Corte</strong><span>R$50</span></div>
+      <div id="addedItem" class="metric hidden"><strong>Pomada Matte</strong><span>R$40</span></div>
+      <button id="addItem" class="btn ghost" style="margin-top:10px">+ Adicionar item</button>
+      <div class="div"></div>
+      <div class="metric"><strong>Total</strong><span id="checkoutTotal" style="font-weight:950;color:var(--text)">R$50</span></div>
+      <label style="margin-top:13px">Pagamento</label>
+      <div class="grid2">
+        <button class="chip pay active">PIX</button><button class="chip pay">Dinheiro</button>
+        <button class="chip pay">Débito</button><button class="chip pay">Crédito</button>
+      </div>
+      <div class="field" style="margin-top:14px"><label>Observação • opcional</label><input placeholder="Ex.: não subir tanto a lateral"></div>
+      <button class="btn ghost" id="savePhoto">📷 Salvar foto do resultado • opcional</button>
+      <button class="btn primary" id="finishCut" style="margin-top:9px">Confirmar finalização</button>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section id="b-client" class="screen" data-group="barber">
+    <button class="btn ghost" data-go="b-active" style="margin-bottom:10px">← Atendimento</button>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="avatar">JM</div>
+        <div><h2 style="margin:0">João Martins</h2><div class="stars">★★★★★</div></div>
+      </div>
+      <div class="div"></div>
+      <div class="metric"><strong>Última visita</strong><span>há 21 dias</span></div>
+      <div class="metric"><strong>Frequência média</strong><span>18 dias</span></div>
+      <div class="metric"><strong>Barbeiro preferido</strong><span>Lucas</span></div>
+      <div class="metric"><strong>Comparecimento</strong><span>9 de 10</span></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Preferências e fotos</div>
+      <p style="margin-top:7px">Degradê baixo • topo na tesoura • não subir muito a lateral.</p>
+      <div class="grid2">
+        <div class="soft" style="margin:0;text-align:center;padding:24px 10px">🖼️<div class="small">Referência atual</div></div>
+        <div class="soft" style="margin:0;text-align:center;padding:24px 10px">📷<div class="small">Último resultado</div></div>
       </div>
     </div>
   </section>
 
-  <section id="owner" class="screen">
-    <div class="card hero-wrap">
-      <span class="tag">VISÃO DO DONO</span>
-      <p style="margin-top:16px;margin-bottom:4px">Faturamento hoje</p>
-      <div class="hero-number" style="font-size:42px">R$820</div>
-      <div class="progress"><div style="width:72%"></div></div>
-      <div class="statline"><strong>Ocupação das cadeiras</strong><span>72%</span></div>
-    </div>
-
-    <div class="card">
-      <div class="label">Oportunidade de hoje</div>
-      <h2 style="margin-top:6px">Você ainda tem <span class="highlight">R$260</span> de capacidade disponível.</h2>
-      <p>São aproximadamente 2h10 de cadeira sem atendimento ao longo do dia.</p>
-      <button id="seeOpportunity" class="btn primary">Ver como preencher</button>
-      <div id="opportunityBox" class="hidden" style="margin-top:10px">
-        <div class="soft" style="margin-bottom:8px"><b>Lucas • 40 min livres</b><p style="margin:5px 0 0">8 clientes compatíveis para Estou Livre.</p></div>
-        <div class="soft"><b>Rafael • 30 min livres</b><p style="margin:5px 0 0">1 cliente da fila cabe antes do próximo horário.</p></div>
+  <!-- 10 -->
+  <section id="o-home" class="screen" data-group="owner">
+    <div class="card hero">
+      <div class="eyebrow">Tela 10 • Visão do dono</div>
+      <h1 style="margin-top:7px">Sua barbearia hoje</h1>
+      <div class="grid2">
+        <div class="kpi"><b>R$1.240</b><span>faturamento</span></div>
+        <div class="kpi"><b>27</b><span>atendimentos</span></div>
+        <div class="kpi"><b>74%</b><span>ocupação</span></div>
+        <div class="kpi"><b>2h35</b><span>tempo ocioso</span></div>
       </div>
     </div>
-
-    <div class="grid2" style="margin-bottom:12px">
-      <div class="kpi"><span>Resultado estimado</span><b>R$675</b></div>
-      <div class="kpi"><span>Clientes em risco</span><b>12</b></div>
-      <div class="kpi"><span>Atendimentos</span><b>23</b></div>
-      <div class="kpi"><span>Ticket médio</span><b>R$35,65</b></div>
-    </div>
-
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-        <h3 style="margin:0">Insights</h3>
-        <span class="tag">IA operacional</span>
-      </div>
-      <div class="divider"></div>
-      <div class="statline"><strong>Terça, 14h–16h</strong><span>menor ocupação</span></div>
-      <div class="statline"><strong>12 clientes atrasados</strong><span>ação sugerida</span></div>
-      <div class="statline"><strong>Corte + barba</strong><span>maior ticket</span></div>
+      <div class="eyebrow">Alertas inteligentes</div>
+      <div class="metric"><strong>⚠️ Lucas terá 40 min livres</strong><span>15:20</span></div>
+      <div class="metric"><strong>💡 Clientes próximos do retorno</strong><span>6</span></div>
+      <div class="metric"><strong>📦 Estoque baixo</strong><span>2 itens</span></div>
+      <div class="metric"><strong>🪑 Capacidade disponível</strong><span>~R$260</span></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Equipe agora</div>
+      <div class="metric"><strong>Lucas</strong><span>82% • R$310</span></div>
+      <div class="metric"><strong>Rafael</strong><span>67% • R$255</span></div>
+      <div class="metric"><strong>Bruno</strong><span>59% • R$210</span></div>
     </div>
   </section>
 
-  <section id="finance" class="screen">
-    <div class="card hero-wrap">
-      <span class="tag">FINANCEIRO INTELIGENTE</span>
-      <h1 style="margin-top:16px">Fale com o financeiro como fala no WhatsApp.</h1>
-      <p>Sem planilha gigante e sem preencher doze campos para registrar uma lâmina.</p>
-    </div>
-
+  <!-- 11 -->
+  <section id="o-agenda" class="screen" data-group="owner">
+    <div class="toolbar"><button class="active">Lista</button><button>Linha do tempo</button><button>Hoje</button></div>
     <div class="card">
-      <div id="chat" class="chat">
-        <div class="bubble me">Comprei R$87 de lâminas hoje.</div>
-        <div class="bubble bot"><b>Encontrei uma despesa.</b><br>R$87 • Materiais • Lâminas • Hoje</div>
+      <div class="eyebrow">Tela 11 • Agenda + fila</div>
+      <h2 style="margin-top:7px">Todos os profissionais</h2>
+      <h3>Lucas</h3>
+      <div class="timeline">
+        <div class="slot live"><small>14:00</small><b>Pedro • Agendado</b></div>
+        <div class="slot warn"><small>14:40–15:20</small><b>40 min livres</b><small>30 min de corte + 10 min margem</small></div>
+        <div class="slot"><small>15:20</small><b>Marcos • Agendado</b></div>
       </div>
-      <form id="financeForm" style="margin-top:14px">
-        <label for="financeInput">Pergunte ou registre algo</label>
-        <input id="financeInput" placeholder="Ex.: quanto faturei hoje?">
-        <button class="btn primary" style="margin-top:8px" type="submit">Enviar</button>
-      </form>
-      <div class="row" style="margin-top:8px">
-        <button class="btn secondary quickQ" data-q="Quanto faturei hoje?">Faturamento</button>
-        <button class="btn secondary quickQ" data-q="Qual horário fica mais vazio?">Horário vazio</button>
+      <button id="ownerFit" class="btn primary">Confirmar encaixe sugerido</button>
+    </div>
+    <div class="card">
+      <h3>Rafael</h3>
+      <div class="metric"><strong>14:00 • Bruno</strong><span>👥 Fila</span></div>
+      <div class="metric"><strong>14:40</strong><span class="status-green">Livre</span></div>
+      <div class="metric"><strong>15:00 • Carlos</strong><span>📅 Agendado</span></div>
+    </div>
+  </section>
+
+  <!-- 12 -->
+  <section id="o-finance" class="screen" data-group="owner">
+    <div class="card hero">
+      <div class="eyebrow">Tela 12 • Financeiro</div>
+      <h1 style="margin-top:7px">R$8.030</h1>
+      <p>Resultado estimado neste mês</p>
+      <div class="grid3">
+        <div class="kpi"><b>18,4k</b><span>receitas</span></div>
+        <div class="kpi"><b>6,1k</b><span>comissões</span></div>
+        <div class="kpi"><b>4,3k</b><span>despesas</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Movimentações</div>
+      <div class="metric"><strong>+ R$90 • João</strong><span>PIX</span></div>
+      <div class="metric"><strong>- R$87 • Lâminas</strong><span>Materiais</span></div>
+      <div class="metric"><strong>+ R$80 • Pedro</strong><span>Débito</span></div>
+    </div>
+    <div class="card">
+      <span class="tag">✨ IA FINANCEIRA</span>
+      <h2 style="margin-top:12px">Pergunte como se estivesse conversando.</h2>
+      <div id="finChat" class="chat">
+        <div class="bubble ai">Posso consultar faturamento, despesas, comissões, produtos e preparar lançamentos para sua confirmação.</div>
+      </div>
+      <div class="row">
+        <input id="finInput" placeholder="Quanto faturei hoje?">
+        <button id="finSend" class="btn primary" style="flex:0 0 84px">Enviar</button>
+      </div>
+      <div class="chips" style="margin-top:10px">
+        <button class="chip q">Quanto faturei hoje?</button>
+        <button class="chip q">Gastei 87 reais em lâminas</button>
       </div>
     </div>
   </section>
 
-  <section id="presentation" class="screen">
-    <div class="card hero-wrap">
-      <div class="label">MODO REUNIÃO • <span id="stepCount">1/5</span></div>
-      <h1 id="stepTitle" style="margin-top:10px">O cliente quer cortar agora.</h1>
-      <p id="stepText">Ele não precisa escolher entre agenda e fila. O sistema encontra a melhor forma de atendê-lo.</p>
-      <div id="stepDemo" class="soft">
-        <div class="label">Resultado</div>
-        <h3 style="margin:7px 0 0">Lucas disponível agora.</h3>
-      </div>
-      <div class="row" style="margin-top:12px">
-        <button id="prevStep" class="btn secondary">Voltar</button>
-        <button id="nextStep" class="btn primary">Próximo</button>
-      </div>
+  <!-- 13 -->
+  <section id="o-admin" class="screen" data-group="owner">
+    <div class="card">
+      <div class="eyebrow">Tela 13 • Equipe</div>
+      <h2 style="margin-top:7px">Profissionais</h2>
+      <button class="listbtn"><span class="avatar">L</span><span class="grow"><b>Lucas</b><br><span class="small">40% comissão • Estou Livre ✅</span></span><span>›</span></button>
+      <button class="listbtn"><span class="avatar">R</span><span class="grow"><b>Rafael</b><br><span class="small">40% comissão • Estou Livre ✅</span></span><span>›</span></button>
+      <button class="btn ghost">+ Adicionar profissional</button>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Produtos e compras</div>
+      <h2 style="margin-top:7px">Estoque</h2>
+      <div class="metric"><strong>Pomada Matte</strong><span>8 un • R$40</span></div>
+      <div class="metric"><strong>Lâminas</strong><span class="status-amber">8 un • mínimo 10</span></div>
+      <div class="metric"><strong>Óleo para barba</strong><span class="status-red">2 un • baixo</span></div>
+      <button class="btn primary" id="registerBuy" style="margin-top:12px">Registrar compra</button>
     </div>
   </section>
 
-  <section id="founders" class="screen">
-    <div class="card hero-wrap">
-      <span class="tag">PROGRAMA FUNDADORES</span>
-      <h1 style="margin-top:16px">Primeira turma: até 10 barbearias.</h1>
-      <p>O projeto começa com no mínimo 5 participantes. A ideia é construir a versão real ao lado das primeiras barbearias.</p>
-      <div class="soft" style="margin-bottom:8px">✓ Implantação personalizada</div>
-      <div class="soft" style="margin-bottom:8px">✓ Condição especial de fundador</div>
-      <div class="soft" style="margin-bottom:8px">✓ Participação nas melhorias</div>
-      <div class="soft">✓ Suporte próximo durante o piloto</div>
-      <button id="interest" class="btn primary" style="margin-top:12px">Tenho interesse</button>
+  <!-- 14 -->
+  <section id="o-settings" class="screen" data-group="owner">
+    <div class="card">
+      <div class="eyebrow">Tela 14 • Configurações</div>
+      <h2 style="margin-top:7px">Regras da barbearia</h2>
+      <div class="field"><label>Modelo de atendimento</label><select><option>Híbrido: agenda + fila</option><option>Somente agenda</option><option>Somente ordem de chegada</option></select></div>
+      <div class="field"><label>Margem antes do próximo agendamento</label><select><option>5 minutos</option><option selected>10 minutos</option><option>15 minutos</option></select></div>
+      <div class="field"><label>Tolerância de atraso</label><select><option selected>10 minutos • decisão manual</option><option>15 minutos</option></select></div>
+      <div class="switchline"><div><strong>Barbeiros podem usar Estou Livre</strong></div><div class="switch on"></div></div>
+      <div class="switchline"><div><strong>Classificação por comparecimento</strong></div><div class="switch on"></div></div>
+      <div class="switchline"><div><strong>Assistente por voz</strong><div class="small">Apelido personalizado por barbeiro</div></div><div class="switch on"></div></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Identidade</div>
+      <div class="field" style="margin-top:10px"><label>Nome</label><input value="Barber House"></div>
+      <div class="field"><label>Link personalizado</label><input value="barber-house"></div>
+      <button class="btn primary" id="saveSettings">Salvar configurações</button>
     </div>
   </section>
 </div>
 
-<nav class="bottomnav">
-  <button class="nav active" data-nav="home"><span>👤</span>Cliente</button>
-  <button class="nav" data-nav="barber"><span>💈</span>Barbeiro</button>
-  <button class="nav" data-nav="owner"><span>📊</span>Dono</button>
-  <button class="nav" data-nav="finance"><span>💰</span>Financeiro</button>
+<button id="voiceBtn" class="voice">🎙️</button>
+
+<nav id="bottomnav" class="bottomnav">
+  <button class="nav active" data-owner-nav="o-home"><b>⌂</b>Hoje</button>
+  <button class="nav" data-owner-nav="o-agenda"><b>▦</b>Agenda</button>
+  <button class="nav" data-owner-nav="o-finance"><b>R$</b>Financeiro</button>
+  <button class="nav" data-owner-nav="o-settings"><b>⚙</b>Ajustes</button>
 </nav>
+
+<div id="voiceModal" class="modal">
+  <div class="sheet">
+    <div class="eyebrow">Assistente por voz • Alfred</div>
+    <div class="mic">🎙️</div>
+    <h2 style="text-align:center">O que você precisa?</h2>
+    <p id="voiceReply" style="text-align:center">Toque em um exemplo para simular um comando.</p>
+    <div class="chips">
+      <button class="chip voicecmd">Quem é o próximo?</button>
+      <button class="chip voicecmd">Abrir ficha do João</button>
+      <button class="chip voicecmd">Estou livre</button>
+      <button class="chip voicecmd">Quanto faturei hoje?</button>
+    </div>
+    <button id="closeVoice" class="btn ghost" style="margin-top:14px">Fechar</button>
+  </div>
+</div>
 
 <script>
 (function(){
-  const screens=["home","choose","queue","barber","owner","finance","presentation","founders"];
-  const qs=s=>document.querySelector(s), qsa=s=>Array.from(document.querySelectorAll(s));
-  let queue=0, step=0, noticeTimer=null;
+  var selectedService='Corte', selectedPrice=50, selectedMin=30, selectedBarber='Primeiro disponível';
+  var mode='client';
 
   function show(id){
-    screens.forEach(x=>qs("#"+x).classList.toggle("active",x===id));
-    qsa(".nav").forEach(b=>b.classList.toggle("active",b.dataset.nav===id));
-    window.scrollTo({top:0,behavior:"smooth"});
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+    var el=document.getElementById(id);
+    if(el) el.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+    updateFloating();
   }
-
   function toast(msg){
-    const n=qs("#notice");
-    n.textContent=msg;
-    n.classList.add("show");
-    clearTimeout(noticeTimer);
-    noticeTimer=setTimeout(()=>n.classList.remove("show"),2600);
+    var n=document.getElementById('notice');
+    n.textContent=msg;n.classList.add('show');
+    clearTimeout(window.__t);window.__t=setTimeout(function(){n.classList.remove('show')},2600);
+  }
+  function setMode(m){
+    mode=m;
+    document.querySelectorAll('.mode').forEach(function(b){b.classList.toggle('active',b.dataset.mode===m)});
+    if(m==='client') show('c-home');
+    if(m==='barber') show('b-home');
+    if(m==='owner') show('o-home');
+    document.getElementById('bottomnav').style.display=m==='owner'?'grid':'none';
+    updateFloating();
+  }
+  function updateFloating(){
+    var active=document.querySelector('.screen.active');
+    var voice=document.getElementById('voiceBtn');
+    voice.classList.toggle('show',mode==='barber' && active && ['b-home','b-active','b-checkout','b-client'].indexOf(active.id)>=0);
   }
 
-  qsa("[data-nav]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.nav)));
-  qsa(".goHome").forEach(b=>b.addEventListener("click",()=>show("home")));
-  qs("#cutToday").addEventListener("click",()=>show("choose"));
-  qs("#schedule").addEventListener("click",()=>toast("Agenda simulada: próximo horário disponível hoje às 15:40 com André."));
-  qs("#myQueue").addEventListener("click",()=>show("queue"));
+  document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.go)})});
+  document.querySelectorAll('.mode').forEach(function(b){b.addEventListener('click',function(){setMode(b.dataset.mode)})});
+  document.getElementById('bottomnav').style.display='none';
 
-  qsa(".chooseBarber").forEach(b=>b.addEventListener("click",()=>{
-    const service=qs("#service").value.split("|");
-    qs("#qBarber").textContent=b.dataset.name;
-    qs("#qService").textContent=service[0]+" • R$"+service[1];
-    queue=0; renderQueue(); show("queue");
-    toast("Entrada confirmada na fila simulada.");
-  }));
+  document.querySelectorAll('.service').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.service').forEach(function(x){x.classList.remove('active')});
+      b.classList.add('active');
+      selectedService=b.dataset.service;selectedPrice=+b.dataset.price;selectedMin=+b.dataset.min;
+    });
+  });
+  document.querySelectorAll('.barberpick').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.barberpick').forEach(function(x){x.classList.remove('active')});
+      b.classList.add('active');selectedBarber=b.dataset.barber;
+      document.getElementById('choiceSummary').textContent=selectedService+' • '+selectedBarber+' • R$'+selectedPrice;
+    });
+  });
+  document.querySelectorAll('.chip').forEach(function(b){
+    if(!b.classList.contains('q')&&!b.classList.contains('voicecmd')&&!b.classList.contains('pay')){
+      b.addEventListener('click',function(){
+        if(b.parentElement) Array.from(b.parentElement.children).forEach(function(x){if(x.classList)x.classList.remove('active')});
+        b.classList.add('active');
+      });
+    }
+  });
+  document.querySelectorAll('.pay').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.pay').forEach(function(x){x.classList.remove('active')});b.classList.add('active');
+    });
+  });
 
-  const queueSteps=[
-    ["NA FILA","28","Você é o 3º da fila","Pode continuar onde está. Avisaremos quando estiver perto da sua vez.","20%"],
-    ["PREPARE-SE","18","Você é o 2º da fila","Sua vez está se aproximando.","42%"],
-    ["HORA DE IR","10","Sua vez está chegando","Recomendamos sair agora.","65%"],
-    ["ESTOU INDO","5","Você é o próximo","Seu lugar está reservado dentro da tolerância.","82%"],
-    ["CHEGUEI","2","Barbeiro finalizando","Você já está na barbearia.","92%"],
-    ["EM ATENDIMENTO","0","Seu atendimento começou","Histórico sendo atualizado.","100%"],
-    ["FINALIZADO","0","Atendimento concluído","Seu próximo período provável de retorno será acompanhado.","100%"]
-  ];
+  var qStep=0;
+  document.getElementById('trackAdvance').addEventListener('click',function(){
+    qStep++;
+    var min=document.getElementById('trackMin'), bar=document.getElementById('trackBar'), title=document.getElementById('trackTitle'), text=document.getElementById('trackText'), state=document.getElementById('trackState'), going=document.getElementById('goingBtn');
+    if(qStep===1){min.textContent='10';bar.style.width='66%';title.textContent='Prepare-se';text.textContent='Você será o próximo em aproximadamente 10 minutos.';state.textContent='PREPARE-SE';going.classList.remove('hidden')}
+    else if(qStep===2){min.textContent='4';bar.style.width='86%';title.textContent='Você é o próximo';text.textContent='É hora de ir para a barbearia.';state.textContent='HORA DE IR';going.classList.remove('hidden')}
+    else{min.textContent='0';bar.style.width='100%';title.textContent='Pode chegar 💈';text.textContent='Lucas está pronto para receber você.';state.textContent='SUA VEZ';going.textContent='✅ Cheguei'}
+  });
+  document.getElementById('goingBtn').addEventListener('click',function(){toast('Lucas foi avisado que você está a caminho.');this.textContent='✅ Avisado'});
 
-  function renderQueue(){
-    const q=queueSteps[queue];
-    qs("#qState").textContent=q[0];
-    qs("#qMin").textContent=q[1];
-    qs("#qPos").textContent=q[2];
-    qs("#qMsg").textContent=q[3];
-    qs("#qBar").style.width=q[4];
-    qs("#advanceQueue").textContent=queue===queueSteps.length-1?"Reiniciar fila":"Simular avanço da fila";
+  document.getElementById('fakeUpload').addEventListener('click',function(){toast('Referência adicionada à ficha • demonstração')});
+  document.getElementById('freeBtn').addEventListener('click',function(){toast('5 clientes compatíveis encontrados para este período.')});
+
+  var item=false;
+  document.getElementById('addItem').addEventListener('click',function(){
+    item=!item;document.getElementById('addedItem').classList.toggle('hidden',!item);
+    document.getElementById('checkoutTotal').textContent=item?'R$90':'R$50';
+    this.textContent=item?'✓ Pomada adicionada • tocar para remover':'+ Adicionar item';
+  });
+  document.getElementById('savePhoto').addEventListener('click',function(){toast('Foto do resultado anexada à ficha • opcional')});
+  document.getElementById('finishCut').addEventListener('click',function(){
+    toast('Atendimento finalizado. Receita, comissão, histórico e estoque atualizados.');
+    setTimeout(function(){show('b-home')},900);
+  });
+
+  document.querySelectorAll('[data-owner-nav]').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('[data-owner-nav]').forEach(function(x){x.classList.remove('active')});
+      b.classList.add('active');show(b.dataset.ownerNav);
+    });
+  });
+  document.getElementById('ownerFit').addEventListener('click',function(){toast('Encaixe confirmado: 30 min de serviço + 10 min de margem.')});
+  document.getElementById('registerBuy').addEventListener('click',function(){toast('Compra registrada: estoque atualizado e despesa enviada ao financeiro.')});
+  document.getElementById('saveSettings').addEventListener('click',function(){toast('Configurações salvas.')});
+
+  function aiAnswer(q){
+    var t=q.toLowerCase();
+    if(t.indexOf('87')>=0 || t.indexOf('lâmina')>=0 || t.indexOf('lamina')>=0) return 'Entendi: despesa de R$87 em Materiais • Lâminas • hoje. Em um sistema real eu pediria sua confirmação antes de registrar.';
+    if(t.indexOf('hoje')>=0 && (t.indexOf('fatur')>=0 || t.indexOf('receita')>=0)) return 'Até agora a barbearia faturou R$1.240 em 27 atendimentos. Ticket médio: R$45,92.';
+    if(t.indexOf('comiss')>=0) return 'Comissões acumuladas no período: R$6.120. Lucas representa R$2.168 desse total.';
+    if(t.indexOf('gasto')>=0 || t.indexOf('despesa')>=0) return 'As maiores despesas do mês são aluguel, produtos e marketing. Total registrado: R$4.300.';
+    return 'Posso cruzar receitas, despesas, comissões, produtos, equipe e períodos. Nesta demo os dados são simulados.';
   }
-
-  qs("#advanceQueue").addEventListener("click",()=>{
-    queue=queue===queueSteps.length-1?0:queue+1;
-    renderQueue();
-    if(queue===2) toast("🔔 Faltam aproximadamente 10 minutos. Recomendamos sair agora.");
-  });
-
-  qs("#smartFit").addEventListener("click",()=>{
-    const s=qs("#slotFree");
-    s.innerHTML="<small>14:40</small><b>Marcos • Corte</b><small>Encaixado automaticamente pela fila</small>";
-    s.classList.add("live");
-    toast("Encaixe encontrado sem afetar o agendamento das 15:20.");
-  });
-
-  qs("#freeNow").addEventListener("click",()=>{
-    qs("#freeStats").classList.remove("hidden");
-    toast("18 clientes compatíveis encontrados.");
-  });
-
-  qs("#callBest").addEventListener("click",()=>{
-    toast("Simulação de envio para os 4 clientes mais compatíveis.");
-    setTimeout(()=>{
-      const a=qs("#accepted");
-      a.classList.remove("hidden");
-      a.classList.add("pulse");
-    },750);
-  });
-
-  qs("#seeOpportunity").addEventListener("click",()=>qs("#opportunityBox").classList.toggle("hidden"));
-
-  qsa(".quickQ").forEach(b=>b.addEventListener("click",()=>qs("#financeInput").value=b.dataset.q));
-
-  qs("#financeForm").addEventListener("submit",e=>{
-    e.preventDefault();
-    const input=qs("#financeInput");
-    const t=input.value.trim();
-    if(!t){toast("Digite uma pergunta ou gasto.");return;}
-    const me=document.createElement("div");
-    me.className="bubble me"; me.textContent=t; qs("#chat").appendChild(me);
-    const bot=document.createElement("div");
-    bot.className="bubble bot";
-    const l=t.toLowerCase();
-    if(l.includes("fatur")) bot.innerHTML="<b>Hoje: R$820.</b><br>23 atendimentos e ticket médio de R$35,65.";
-    else if(l.includes("vazio")||l.includes("horário")) bot.innerHTML="<b>Terça-feira, 14h–16h.</b><br>É o período de menor ocupação desta simulação.";
-    else if(l.includes("gast")) bot.innerHTML="<b>Materiais são a maior despesa variável desta simulação.</b><br>R$628 no mês.";
-    else if(/r\$?\s*\d+/i.test(t)) bot.innerHTML="<b>Despesa identificada.</b><br>Posso classificar e registrar depois da sua confirmação.";
-    else bot.innerHTML="<b>Entendi.</b><br>Na versão real, o assistente consulta os dados da própria barbearia.";
-    qs("#chat").appendChild(bot);
-    input.value="";
-    bot.scrollIntoView({behavior:"smooth",block:"nearest"});
-  });
-
-  const steps=[
-    ["O cliente quer cortar agora.","Ele não precisa escolher entre agenda e fila. O sistema encontra a melhor forma de atendê-lo.","Lucas disponível agora."],
-    ["Agenda e fila trabalham juntas.","Se houver espaço antes do próximo agendamento, alguém da fila pode ser encaixado automaticamente.","14:40 livre → corte encaixado → 15:20 preservado."],
-    ["O cliente não fica preso esperando.","A fila atualiza a previsão e avisa quando realmente é hora de sair.","28 min → 18 min → 10 min → Estou indo."],
-    ["Uma cadeira ficou vazia.","O Estou Livre encontra clientes com maior chance de aparecer naquele momento.","4 clientes muito compatíveis → João aceita → 12 min."],
-    ["Uma cadeira parada virou faturamento.","O dono vê ocupação, capacidade perdida, receita e clientes em risco numa visão simples.","Menos espera. Menos cadeira vazia. Mais controle."]
-  ];
-
-  function renderStep(){
-    const s=steps[step];
-    qs("#stepCount").textContent=(step+1)+"/"+steps.length;
-    qs("#stepTitle").textContent=s[0];
-    qs("#stepText").textContent=s[1];
-    qs("#stepDemo").innerHTML='<div class="label">Resultado</div><h3 style="margin:7px 0 0">'+s[2]+"</h3>";
-    qs("#prevStep").disabled=step===0;
-    qs("#nextStep").textContent=step===steps.length-1?"Ver painel do dono":"Próximo";
+  function sendFinance(q){
+    if(!q.trim())return;
+    var chat=document.getElementById('finChat');
+    var me=document.createElement('div');me.className='bubble me';me.textContent=q;chat.appendChild(me);
+    var ai=document.createElement('div');ai.className='bubble ai';ai.textContent=aiAnswer(q);chat.appendChild(ai);
+    chat.scrollTop=chat.scrollHeight;
   }
+  document.getElementById('finSend').addEventListener('click',function(){var i=document.getElementById('finInput');sendFinance(i.value);i.value=''});
+  document.getElementById('finInput').addEventListener('keydown',function(e){if(e.key==='Enter'){sendFinance(this.value);this.value=''}});
+  document.querySelectorAll('.q').forEach(function(b){b.addEventListener('click',function(){sendFinance(b.textContent)})});
 
-  qs("#guided").addEventListener("click",()=>{step=0;renderStep();show("presentation")});
-  qs("#prevStep").addEventListener("click",()=>{if(step>0){step--;renderStep()}});
-  qs("#nextStep").addEventListener("click",()=>{
-    if(step<steps.length-1){step++;renderStep()} else show("owner");
+  var modal=document.getElementById('voiceModal');
+  document.getElementById('voiceBtn').addEventListener('click',function(){modal.classList.add('show')});
+  document.getElementById('closeVoice').addEventListener('click',function(){modal.classList.remove('show')});
+  document.querySelectorAll('.voicecmd').forEach(function(b){
+    b.addEventListener('click',function(){
+      var q=b.textContent, r='Comando entendido.';
+      if(q.indexOf('próximo')>=0)r='Pedro é o próximo cliente, às 15:20.';
+      if(q.indexOf('ficha')>=0)r='Abrindo a ficha de João Martins.';
+      if(q.indexOf('livre')>=0)r='Você tem cerca de 45 minutos livres. Encontrei 5 clientes compatíveis.';
+      if(q.indexOf('faturei')>=0)r='Você gerou R$280 hoje. Sua comissão estimada é R$112.';
+      document.getElementById('voiceReply').textContent='Alfred: '+r;
+    });
   });
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('show')});
 
-  qs("#interest").addEventListener("click",()=>toast("Na versão pública final, este botão pode abrir seu WhatsApp comercial."));
-
-  renderQueue();
-  renderStep();
+  setMode('client');
 })();
 </script>
 </body>
